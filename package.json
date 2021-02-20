@@ -1,0 +1,32 @@
+{
+  "name": "shopcart",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "server": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PratyushAtri/ShopCart.git"
+  },
+  "author": "Pratyush Atri",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PratyushAtri/ShopCart/issues"
+  },
+  "homepage": "https://github.com/PratyushAtri/ShopCart#readme",
+  "dependencies": {
+    "config": "^3.3.3",
+    "express": "^4.17.1",
+    "express-validator": "^6.9.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.17",
+    "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "concurrently": "^6.0.0",
+    "nodemon": "^2.0.7"
+  }
+}
