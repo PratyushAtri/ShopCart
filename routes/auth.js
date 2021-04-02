@@ -7,7 +7,6 @@ const router = express.Router();
 
 const User = require('../models/User');
 const auth = require('../middleware/auth');
-const { response } = require('express');
 
 // Get user information
 router.get('/', auth, async (req, res) => {
@@ -17,6 +16,31 @@ router.get('/', auth, async (req, res) => {
         const user = await User.findById(req.user.id).select('-password');
         // send the user
         res.json(user);        
+    } 
+    catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');    
+    }
+
+});
+
+// Get all Users
+router.get('/users', auth, async (req, res) => {
+
+    const user = await User.findById(req.user.id);
+
+    try {
+        
+        // get all user
+        const users = await User.find().select('-password');
+        // if current user is an admin send all the users
+        if (user.admin == true) {
+            res.json(users);
+        }
+        else {
+            res.status(400).json({ errors: 'You are not an Admin' });
+        }
+
     } 
     catch (err) {
         console.error(err.message);

@@ -22,10 +22,11 @@ router.post ('/', [
 
     const { name, email, password, adminPass } = req.body;
     const adminCorrectPass = 94038020440540460420160;
-    let admin = false;
+    
 
     try {
-
+        let admin = false;
+        
         // See if the user exists
         let user = await User.findOne({ name });  
         
