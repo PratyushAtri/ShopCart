@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 const User = require('../models/User');
+const Order = require('../models/Order');
 
 // Register User // JWT token returned for success
 router.post ('/', [
@@ -23,16 +24,16 @@ router.post ('/', [
     const { name, email, password, adminPass } = req.body;
     const adminCorrectPass = 94038020440540460420160;
     
-
+    
     try {
         let admin = false;
         
         // See if the user exists
-        let user = await User.findOne({ name });  
+        let user = await User.findOne({ email });  
         
         // user already exists
         if (user) {
-            return res.status(400).json({ errors: [{ msg: `User ${name} already exists` }] });
+            return res.status(400).json({ errors: [{ msg: `A user already has used this email` }] });
         }
 
         // user does not exist
@@ -41,7 +42,7 @@ router.post ('/', [
             admin = true;
         }
 
-        // save the user ini database 
+        // save the user in the database 
         user = new User({
             name,
             email,
@@ -68,6 +69,11 @@ router.post ('/', [
                 res.json({ token });
             }
             );
+
+        let order = await Order.find({ userId: user.id })
+        if (order) {
+
+        }
 
     } 
     catch (err) {

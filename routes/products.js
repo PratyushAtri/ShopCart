@@ -9,7 +9,7 @@ const Product = require('../models/Product');
 const router = express.Router();
 
 // get all products / return products if success
-router.get('/', auth, async (req, res) => {
+router.get('/', async (req, res) => {
 
     try {
         const products = await Product.find();
@@ -24,7 +24,7 @@ router.get('/', auth, async (req, res) => {
 });
 
 // get a product / return product on success
-router.get('/:id', auth, async (req, res) => {
+router.get('/:id', async (req, res) => {
 
     try {
         const product = await Product.findById(req.params.id);
@@ -124,7 +124,6 @@ router.post('/', [ auth,
         console.error(err.message);
         res.status(500).send('Server Error');
     }
-
 
 });
 
