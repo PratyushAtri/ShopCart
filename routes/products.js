@@ -29,8 +29,13 @@ router.get('/:id', async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
 
-        res.json(product);
-        
+        if (product) {
+            return res.json(product);  
+        }
+        else {
+            return res.json({ errors: "Product not found" });
+        }
+
     }
     catch (err) {
         console.error(err.message);
@@ -58,12 +63,15 @@ router.delete('/', [ auth,
 
     try {
 
-        if (user.id == product.user) {
+        if (user.id == product.user | user.admin === true) {
             await Product.findOneAndRemove({ _id: productId });
             const products = await Product.find();
 
             res.json(products); 
-        }        
+        }     
+        else {
+            return res.json({ errors: "You dont have permission to use this command" });
+        }   
 
     }
     catch(err) {
@@ -92,33 +100,35 @@ router.post('/', [ auth,
     const canBuy = inStock > 0 ? true : false;
     const numberOfQuality = qualities.length;
     let user = await User.findById( req.user.id );
-    user = user.id
     
     try {
         
-        let product = await Product.findOne({ user });
+        let product = await Product.findOne({ user: user.id });
+        const newProduct = new Product({
+            name,
+            image,
+            cost,
+            inStock,
+            canBuy,
+            qualities,
+            numberOfQuality,
+            user
+        });
 
-        if (!product) {
-            const newProduct = new Product({
-                name,
-                image,
-                cost,
-                inStock,
-                canBuy,
-                qualities,
-                numberOfQuality,
-                user
-            });
-    
+        if (user.admin === true) {
+            if (product & product === newProduct) {
+                return res.send('Product already exists');
+            }
+
             product = await newProduct.save();
             const products = await Product.find();
     
-            res.json(products);
+            return res.json(products);
         }
         else {
-            res.send('Product already exists');
+            res.json({ errors: "You dont have permission to use this command" });
         }
-
+        
     }
     catch (err) {
         console.error(err.message);

@@ -11,6 +11,7 @@ app.use(express.json({ extended: false }));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/products', require('./routes/products'));
+app.use('/api/orders', require('./routes/order'));
 
 if (process.env.NODE_ENV === 'production') {
     // Set static folder
@@ -23,4 +24,4 @@ if (process.env.NODE_ENV === 'production') {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => console.log(`Server started on PORT ${PORT}`));
+app.listen(PORT, () => console.log(`Server started on http://localhost:${PORT}`));
