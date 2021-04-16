@@ -77,4 +77,54 @@ router.get('/', auth, async (req, res) => {
 
 });
 
+// get all orders
+router.get('/orders', auth, async (req, res) => {
+
+    const user = await User.findById(req.user.id);
+    const orders = await Order.find();
+    let admin = user.admin;
+
+    try {
+
+        if (admin) {
+            res.json(orders);
+        }
+
+        res.json({ errors: "You are not a admin, you can not access to this command" });
+
+    }
+    catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+
+});
+
+// delete/cancel order
+router.delete('/:orderListId/:productId', auth, async (req, res) => {
+    
+    const user = await User.findById(req.user.id);
+    const orders = await Order.findById(req.params.orderListId);
+    let admin = user.admin;
+
+    try {
+
+        if (admin) {
+            const removeIndex = orders.orders.map(it => it.productId).indexOf(req.params.productId);
+            orders.orders.splice(removeIndex, 1);
+            await orders.save();
+
+            res.json(orders);
+        }
+
+        res.json({ errors: "You are not a admin, you can not access to this command" });
+
+    }
+    catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+
+});
+
 module.exports = router;
